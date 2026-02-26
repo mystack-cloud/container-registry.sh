@@ -6,8 +6,6 @@ Pure shell (curl + jq). Domain: **container-registry.sh**
 
 ## Install
 
-Same style as [acme.sh](https://github.com/acmesh-official/acme.sh):
-
 ```bash
 curl https://get.container-registry.sh | sh -s
 ```
