@@ -4,6 +4,7 @@
 #    or: wget -qO- https://get.container-registry.sh | sh -s
 #
 # Installs to $HOME/.local/bin by default. Override: INSTALL_DIR=/path SCRIPT_URL=url
+# Adds install dir to PATH in ~/.bashrc, ~/.zshrc, or ~/.profile. Set SKIP_PATH=1 to skip.
 # Dependencies: curl|wget (for install), then jq, tar; gzip optional. Set INSTALL_DEPS=1 to try installing missing deps.
 
 set -e
@@ -79,8 +80,28 @@ fi
 chmod +x "${INSTALL_DIR}/container-registry.sh"
 echo "Installed to: ${INSTALL_DIR}/container-registry.sh"
 
+# Auto-add install dir to PATH in shell rc if not already there (set SKIP_PATH=1 to skip)
+add_to_path() {
+  _dir="$1"
+  [ "$SKIP_PATH" = "1" ] && return 0
+  _path_line="export PATH=\"${_dir}:\$PATH\""
+  for _rc in "${HOME}/.bashrc" "${HOME}/.zshrc" "${HOME}/.profile"; do
+    [ ! -f "$_rc" ] && continue
+    if grep -q "# container-registry.sh" "$_rc" 2>/dev/null; then
+      return 0
+    fi
+    echo "" >> "$_rc"
+    echo "# container-registry.sh" >> "$_rc"
+    echo "$_path_line" >> "$_rc"
+    echo "Added to PATH in $_rc"
+    return 0
+  done
+  return 0
+}
+
 if [ -x "${INSTALL_DIR}/container-registry.sh" ]; then
+  add_to_path "$INSTALL_DIR"
   echo ""
-  echo "Run with: ${INSTALL_DIR}/container-registry.sh pull alpine:3.19"
-  echo "Or add to PATH: export PATH=\"\$HOME/.local/bin:\$PATH\""
+  echo "Run: container-registry.sh pull alpine:3.19"
+  echo "  (or in this shell: export PATH=\"${INSTALL_DIR}:\$PATH\")"
 fi

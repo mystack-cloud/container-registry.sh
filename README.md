@@ -16,10 +16,10 @@ Or with wget:
 wget -qO- https://get.container-registry.sh | sh -s
 ```
 
-This installs `container-registry.sh` into `~/.local/bin`. Add to PATH if needed:
+This installs `container-registry.sh` into `~/.local/bin` and **adds it to PATH** in the first of `~/.bashrc`, `~/.zshrc`, or `~/.profile` (new shells will have `container-registry.sh` on PATH). To skip modifying your shell config:
 
 ```bash
-export PATH="$HOME/.local/bin:$PATH"
+SKIP_PATH=1 curl https://get.container-registry.sh | sh -s
 ```
 
 Override install directory:
