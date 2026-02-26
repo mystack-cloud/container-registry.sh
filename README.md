@@ -30,6 +30,12 @@ Override install directory:
 INSTALL_DIR=/usr/local/bin curl https://get.container-registry.sh | sh -s
 ```
 
+The installer **does not** install dependencies (curl, jq, tar, gzip). If any are missing it will exit with a message. To try automatic install of deps (apt/dnf/yum/apk/brew):
+
+```bash
+INSTALL_DEPS=1 curl https://get.container-registry.sh | sh -s
+```
+
 To install from a specific URL (e.g. GitHub raw):
 
 ```bash
